@@ -1,0 +1,13 @@
+-DTARGET_OS_OSX=0
+-DTARGET_OS_MACCATALYST=0
+-Inewlib/aarch64-none-darwin/include
+-DPONGO_VERSION="2.5.1-4c9b7541"
+-DAUTOBOOT
+-DPONGO_PRIVATE=1
+-Isrc/lib
+-Iinclude
+-Iapple-include
+-Iinclude/modules/linux/
+-Isrc/kernel
+-Isrc/drivers
+-Isrc/modules/linux/libfdt

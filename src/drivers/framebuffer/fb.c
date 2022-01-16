@@ -263,4 +263,5 @@ void screen_init() {
     command_register("fbclear", "clears the framebuffer output (minus banner)", screen_clear_all);
     command_register("fbinvert", "inverts framebuffer contents", screen_invert);
     scale_factor = 1;
+    screen_invert();
 }

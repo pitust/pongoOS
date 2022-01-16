@@ -265,7 +265,9 @@ void shell_main() {
     command_register("paging", "tests paging", paging_cmd);
     command_register("recursion", "tests stack guards", recursion_cmd);
     extern void linux_commands_register(void);
+    extern void stivale2_commands_register();
     linux_commands_register();
+    stivale2_commands_register();
     usbloader_init();
 
     /*

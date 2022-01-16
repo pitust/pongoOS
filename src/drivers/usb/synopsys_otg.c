@@ -221,7 +221,7 @@ void ep0_begin_data_out_stage(bool (*callback)(const void *data, uint32_t size))
 
 static uint8_t ktrw_send_data[0x1000];
 static uint16_t ktrw_send_count;
-static uint16_t ktrw_send_in_flight;
+uint16_t ktrw_send_in_flight;
 
 static uint8_t ktrw_recv_data[0x1000];
 static uint16_t ktrw_recv_count;
@@ -1811,7 +1811,7 @@ void usb_init() {
     cache_clean_and_invalidate((void*)dma_page_v, 4 * DMA_BUFFER_SIZE);
 
     disable_interrupts();
-    usb_irq_mode = 1;
+    usb_irq_mode = 0;
     usb_usbtask_handoff_mode = 0;
     usb_bringup();
 

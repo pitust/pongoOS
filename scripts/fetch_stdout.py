@@ -24,6 +24,7 @@
 
 import sys
 import usb.core
+print(list(usb.core.find(find_all=True)))
 dev = usb.core.find(idVendor=0x05ac, idProduct=0x4141)
 if dev is None:
     raise ValueError('Device not found')
