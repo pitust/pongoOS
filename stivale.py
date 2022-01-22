@@ -71,5 +71,5 @@ dev.ctrl_transfer(0x21, 4, 0, 0, 0)
 print("Booting...")
 dev.ctrl_transfer(0x21, 3, 0, 0, "go-stivale\n")
 
-while True:
-    print(dev.read(0x81, 1).tobytes())
+# while True:
+#     print(dev.read(0x81, 1).tobytes())
