@@ -65,21 +65,21 @@ extern uint64_t ktrw_send_in_flight;
 void usb_handler();
 void usb_write_commit();
 void do_usb_write(const char* buf) {
-    uint64_t towrite = strlen(buf);
-    uint64_t uncommited = 0;
+    // uint64_t towrite = strlen(buf);
+    // uint64_t uncommited = 0;
     // wait until there is nothing in-flight...
-    while (ktrw_send_in_flight) usb_handler();
-    while (towrite) {
-        uint64_t foo = usb_write(buf, towrite);
-        towrite -= foo;
-        uncommited += foo;
-        if (!foo) {
-            if (uncommited) usb_write_commit();
-            uncommited = 0;
-            while (ktrw_send_in_flight) usb_handler();
-        }
-    }
-    while (ktrw_send_in_flight) usb_handler();
+    // while (ktrw_send_in_flight) usb_handler();
+    // while (towrite) {
+    //     uint64_t foo = usb_write(buf, towrite);
+    //     towrite -= foo;
+    //     uncommited += foo;
+    //     if (!foo) {
+    //         if (uncommited) usb_write_commit();
+    //         uncommited = 0;
+    //         while (ktrw_send_in_flight) usb_handler();
+    //     }
+    // }
+    // while (ktrw_send_in_flight) usb_handler();
 }
 void plzz_putchar(char c) {
     char buf[2];
@@ -136,8 +136,8 @@ void go_stivale() {
             gBootArgs->Video.v_width,
             gBootArgs->Video.v_height,
             gBootArgs->Video.v_rowBytes);
-    if (is_16k()) {
-        task_crash_asserted("ERROR: device uses 16k paging!");
+    if (!is_16k()) {
+        task_crash_asserted("ERROR: device uses 4k paging!");
     }
     for (uint64_t i = 0; i < ppages; i++) {
         uint64_t addr = (i << 14ULL) + gBootArgs->physBase;
@@ -162,6 +162,26 @@ void go_stivale() {
     }
 
     disable_interrupts();
+
+    ktrw_send_in_flight = 0;
+    uint64_t towrite = 3;
+    while (towrite) {
+        fprintf(stderr, "usb_write loop go...\n");
+        uint64_t foo = usb_write("foo", towrite);
+        towrite -= foo;
+        fprintf(stderr, "usb_write loop go...\n");
+        if (!foo) {
+            usb_write_commit();
+            fprintf(stderr, "did not write, polling USB...\n");
+            while (ktrw_send_in_flight) usb_handler();
+            fprintf(stderr, "USB poll complete...\n");
+        }
+    }
+    fprintf(stderr, "final usb poll...\n");
+    while (ktrw_send_in_flight) usb_handler();
+    fprintf(stderr, "sent data!\n");
+
+
     sep_teardown();
     __asm__ volatile("dsb sy");
     fprintf(stderr, "interrupts cleared!\n");

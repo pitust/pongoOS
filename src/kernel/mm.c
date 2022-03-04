@@ -248,7 +248,7 @@ void map_range_noflush(uint64_t va, uint64_t pa, uint64_t size, uint64_t sh, uin
 }
 
 void map_range_noflush_rw(uint64_t va, uint64_t pa, uint64_t size, uint64_t sh, uint64_t attridx, bool overwrite) {
-    map_range_map((void*)ttbr0, va, pa, size, sh, attridx, overwrite, 0, PROT_READ|PROT_WRITE|PROT_KERN_ONLY, false);
+    map_range_map((void*)ttbr0, va, pa, size, sh, attridx, overwrite, 0, PROT_READ|PROT_WRITE|PROT_EXEC|PROT_KERN_ONLY, false);
 }
 
 void map_range_noflush_rwx(uint64_t va, uint64_t pa, uint64_t size, uint64_t sh, uint64_t attridx, bool overwrite) {
